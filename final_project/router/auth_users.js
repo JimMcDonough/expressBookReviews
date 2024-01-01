@@ -49,7 +49,33 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const review = req.body.review;
+  const isbn = req.params.isbn;
+  const keysArray = Object.keys(books);
+  for (const element of keysArray) {
+    if ('isbn' in books[element]){
+      if (books[element].isbn == isbn) {
+        //const reviewkeys = Object.keys(books[element]['reviews'])
+        //for (const userkey of reviewkeys) 
+        //let currentReview = 
+        //let isbnreviews = books[element]['reviews']
+        books[element]['reviews'][req.session.authorization.username] = review
+        //books[element]['reviews'] = isbnreviews
+          //if (req.session.authorization.username in books[element]['reviews']){
+            //books[element]['reviews'][req.session.authorization.username] = review;
+          //} else {
+            //books[element]['reviews'][req.session.authorization.username] = review;
+          //}
+        //res.send(review)
+        res.send(`${isbn} review for ${req.session.authorization.username} updated.  \n${JSON.stringify(books[element]['reviews'])}`);
+        
+        
+        //books[element]['reviews'][req.session.authorization]
+      }
+    }
+  }
+  //res.send();
+  //return res.status(300).json({message: "Yet to be implemented:)"});
 });
 
 module.exports.authenticated = regd_users;
