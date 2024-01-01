@@ -34,69 +34,123 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  res.send(JSON.stringify(books,null,4));
-  //return res.status(300).json({message: "Yet to be implemented"});
-});
+public_users.get('/', function (req, res) {
+    // Simulating an asynchronous operation with a Promise
+    const getBookList = new Promise((resolve, reject) => {
+      // Assume books is a synchronous data structure
+      const bookList = JSON.stringify(books, null, 4);
+  
+     
+    resolve(bookList);
+     
+    });
+  
+    // Handle the promise result
+    getBookList
+      .then(bookList => {
+        res.send(bookList);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      });
+  });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  const isbn = req.params.isbn;
-  const isbnresult = [];
-  const keysArray = Object.keys(books);
-  for (const element of keysArray) {
-    if ('isbn' in books[element]){
-        if (books[element].isbn == isbn) {
-            isbnresult.push(books[element]);
-        }
-    }
-  }
-  res.send(isbnresult);
-
-  //let filtered_isbn = books.filter((book) => book.isbn === isbn);
-  //res.send(filtered_isbn);
-  //return res.status(300).json({message: "Yet to be implemented"});
- });
+public_users.get('/isbn/:isbn', function (req, res) {
+    const isbn = req.params.isbn;
   
-// Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  const author = req.params.author;
-  const authoresult =[];
-  const keysArray = Object.keys(books);
-  for (const element of keysArray) {
-    if ('author' in books[element]){
-        if (books[element]['author'] == author) {
-            authoresult.push(books[element]);
+    // Wrap the asynchronous operation in a Promise
+    const findBookByISBN = new Promise((resolve, reject) => {
+      const isbnresult = [];
+      const keysArray = Object.keys(books);
+  
+      for (const element of keysArray) {
+        if ('isbn' in books[element]) {
+          if (books[element].isbn == isbn) {
+            isbnresult.push(books[element]);
+          }
         }
-    }
-  }
-  res.send(authoresult);
-
-
-
-  //return res.status(300).json({message: "Yet to be implemented"});
-});
+      }
+  
+      // Resolve the promise with the result
+      resolve(isbnresult);
+    });
+  
+    // Handle the promise result
+    findBookByISBN
+      .then(result => {
+        res.send(result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      });
+  });
+  
+/// Get book details based on author
+public_users.get('/author/:author', function (req, res) {
+    const author = req.params.author;
+  
+    // Wrap the asynchronous operation in a Promise
+    const findBooksByAuthor = new Promise((resolve, reject) => {
+      const authorResult = [];
+      const keysArray = Object.keys(books);
+  
+      for (const element of keysArray) {
+        if ('author' in books[element]) {
+          if (books[element].author == author) {
+            authorResult.push(books[element]);
+          }
+        }
+      }
+  
+      // Resolve the promise with the result
+      resolve(authorResult);
+    });
+  
+    // Handle the promise result
+    findBooksByAuthor
+      .then(result => {
+        res.send(result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      });
+  });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  const title = req.params.title;
-  const titleresult =[];
-  const keysArray = Object.keys(books);
-  for (const element of keysArray) {
-    if ('title' in books[element]){
-        if (books[element]['title'] == title) {
-            titleresult.push(books[element]);
+public_users.get('/title/:title', function (req, res) {
+    const title = req.params.title;
+  
+    // Wrap the asynchronous operation in a Promise
+    const findBooksByTitle = new Promise((resolve, reject) => {
+      const titleResult = [];
+      const keysArray = Object.keys(books);
+  
+      for (const element of keysArray) {
+        if ('title' in books[element]) {
+          if (books[element].title == title) {
+            titleResult.push(books[element]);
+          }
         }
-    }
-  }
-  res.send(titleresult);
-
-  //return res.status(300).json({message: "Yet to be implemented"});
-});
+      }
+  
+      // Resolve the promise with the result
+      resolve(titleResult);
+    });
+  
+    // Handle the promise result
+    findBooksByTitle
+      .then(result => {
+        res.send(result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+      });
+  });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
